@@ -3,7 +3,19 @@ import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } fr
 import { colors } from "../theme";
 import { headlineFont, bodyFont } from "../fonts";
 
-export const CliffhangerScene: React.FC = () => {
+type Props = {
+  title?: string;
+  subtitle?: string;
+  ctaLabel?: string;
+  shareLabel?: string;
+};
+
+export const CliffhangerScene: React.FC<Props> = ({
+  title = "O que você faria?",
+  subtitle = "Nova história toda semana.",
+  ctaLabel = "SEGUE PARA SABER O FINAL",
+  shareLabel = "📤 Marca alguém que faria igual.",
+}) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
@@ -56,7 +68,7 @@ export const CliffhangerScene: React.FC = () => {
             transform: `scale(${Math.max(titleScale, 0)})`,
           }}
         >
-          O que você faria?
+          {title}
         </div>
 
         <div
@@ -69,7 +81,7 @@ export const CliffhangerScene: React.FC = () => {
             letterSpacing: 1,
           }}
         >
-          Nova história toda semana.
+          {subtitle}
         </div>
 
         <div
@@ -94,7 +106,7 @@ export const CliffhangerScene: React.FC = () => {
               color: colors.marfim,
             }}
           >
-            SEGUE PARA SABER O FINAL
+            {ctaLabel}
           </span>
         </div>
 
@@ -108,7 +120,7 @@ export const CliffhangerScene: React.FC = () => {
             letterSpacing: 0.5,
           }}
         >
-          📤 Marca alguém que faria igual.
+          {shareLabel}
         </div>
 
         <div

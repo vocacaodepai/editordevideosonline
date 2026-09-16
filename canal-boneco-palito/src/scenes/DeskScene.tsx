@@ -4,7 +4,15 @@ import { colors } from "../theme";
 import { StickFigure } from "../StickFigure";
 import { Caption } from "../Caption";
 
-export const DeskScene: React.FC = () => {
+type Props = {
+  captionText?: string;
+  captionHighlight?: string;
+};
+
+export const DeskScene: React.FC<Props> = ({
+  captionText = "Faltavam trinta segundos para a reunião começar.",
+  captionHighlight = "trinta segundos",
+}) => {
   const frame = useCurrentFrame();
 
   const zoom = interpolate(frame, [0, 100], [1, 1.08], {
@@ -95,7 +103,7 @@ export const DeskScene: React.FC = () => {
         </div>
       </AbsoluteFill>
 
-      <Caption text="Faltavam trinta segundos para a reunião começar." highlight="trinta segundos" />
+      <Caption text={captionText} highlight={captionHighlight} />
     </AbsoluteFill>
   );
 };

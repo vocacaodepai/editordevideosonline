@@ -3,7 +3,15 @@ import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { colors } from "../theme";
 import { Caption } from "../Caption";
 
-export const FaceScene: React.FC = () => {
+type Props = {
+  captionText?: string;
+  captionHighlight?: string;
+};
+
+export const FaceScene: React.FC<Props> = ({
+  captionText = "Ele ainda não sabia que essa seria a decisão mais cara da sua vida.",
+  captionHighlight = "decisão mais cara",
+}) => {
   const frame = useCurrentFrame();
   const durationFrames = 200;
 
@@ -57,10 +65,7 @@ export const FaceScene: React.FC = () => {
         }}
       />
 
-      <Caption
-        text="Ele ainda não sabia que essa seria a decisão mais cara da sua vida."
-        highlight="decisão mais cara"
-      />
+      <Caption text={captionText} highlight={captionHighlight} />
     </AbsoluteFill>
   );
 };

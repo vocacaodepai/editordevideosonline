@@ -7,7 +7,17 @@ import { CHARACTER } from "../characterStyle";
 
 const CLICK_FRAME = 70;
 
-export const ClickScene: React.FC = () => {
+type Props = {
+  buttonLabel?: string;
+  captionText?: string;
+  captionHighlight?: string;
+};
+
+export const ClickScene: React.FC<Props> = ({
+  buttonLabel = "ASSINAR CONTRATO",
+  captionText = "Um clique, e a empresa inteira mudaria de dono.",
+  captionHighlight = "Um clique",
+}) => {
   const frame = useCurrentFrame();
 
   const zoom = interpolate(frame, [0, 120], [1, 1.12], {
@@ -64,7 +74,7 @@ export const ClickScene: React.FC = () => {
               color: colors.marfim,
             }}
           >
-            ASSINAR CONTRATO
+            {buttonLabel}
           </span>
         </div>
 
@@ -104,7 +114,7 @@ export const ClickScene: React.FC = () => {
 
       <AbsoluteFill style={{ backgroundColor: colors.marfim, opacity: flash }} />
 
-      <Caption text="Um clique, e a empresa inteira mudaria de dono." highlight="Um clique" />
+      <Caption text={captionText} highlight={captionHighlight} />
     </AbsoluteFill>
   );
 };

@@ -5,8 +5,9 @@ import { bodyFont } from "./fonts";
 
 // CTA discreto e constante, pra lembrar de seguir o canal sem atrapalhar a
 // legenda (que fica na parte de baixo da tela).
-export const SubscribeBadge: React.FC<{ appearAt?: number }> = ({
+export const SubscribeBadge: React.FC<{ appearAt?: number; label?: string }> = ({
   appearAt = 45,
+  label = "SEGUE O CANAL",
 }) => {
   const frame = useCurrentFrame();
 
@@ -56,7 +57,7 @@ export const SubscribeBadge: React.FC<{ appearAt?: number }> = ({
           color: colors.marfim,
         }}
       >
-        SEGUE O CANAL
+        {label}
       </span>
     </div>
   );
