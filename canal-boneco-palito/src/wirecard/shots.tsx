@@ -860,7 +860,7 @@ export const ShotTitle: React.FC<{ duration: number }> = ({ duration }) => (
 
 /** Ficha do foragido. */
 export const ShotWanted: React.FC<{ duration: number }> = ({ duration }) => (
-  <Frame duration={duration} photo="court" center seed="wanted">
+  <Frame duration={duration} photo="court.jpg" center seed="wanted">
     <In at={0} duration={duration} from="down">
       <Kicker color={colors.terracota}>status · wanted</Kicker>
     </In>
