@@ -24,26 +24,26 @@ export const MyComposition = () => {
 export const StickmanHook: React.FC = () => {
   return (
     <>
-      <Audio src={staticFile("audio/hook-narracao-piper.wav")} startFrom={0} volume={1} />
+      <Audio src={staticFile("audio/hook-narracao-faber.wav")} startFrom={0} volume={1} />
 
-      <Sequence from={0} durationInFrames={100}>
+      <Sequence from={0} durationInFrames={90}>
         <DeskScene />
       </Sequence>
 
-      <Sequence from={90} durationInFrames={120}>
+      <Sequence from={80} durationInFrames={110}>
         <ClickScene />
       </Sequence>
 
-      <Sequence from={200} durationInFrames={190}>
+      <Sequence from={180} durationInFrames={170}>
         <FaceScene />
       </Sequence>
 
-      <Sequence from={390} durationInFrames={DURATION_IN_FRAMES - 390}>
+      <Sequence from={340} durationInFrames={DURATION_IN_FRAMES - 340}>
         <CliffhangerScene />
       </Sequence>
 
       {/* CTA fixo (segue o canal), visível durante o hook narrado */}
-      <Sequence from={0} durationInFrames={390}>
+      <Sequence from={0} durationInFrames={340}>
         <SubscribeBadge appearAt={45} />
       </Sequence>
     </>
