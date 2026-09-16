@@ -3,6 +3,7 @@ import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { colors } from "../theme";
 import { Caption } from "../Caption";
 import { bodyFont } from "../fonts";
+import { CHARACTER } from "../characterStyle";
 
 const CLICK_FRAME = 70;
 
@@ -67,13 +68,32 @@ export const ClickScene: React.FC = () => {
           </span>
         </div>
 
+        {/* braço do personagem entrando em quadro para clicar */}
+        <svg
+          viewBox="0 0 1920 1080"
+          preserveAspectRatio="none"
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+        >
+          <line
+            x1={1920}
+            y1={1080}
+            x2={960 + cursorX}
+            y2={540 + cursorY}
+            stroke={CHARACTER.stroke}
+            strokeWidth={CHARACTER.strokeWidth}
+            strokeLinecap="round"
+          />
+        </svg>
+
         {/* cursor */}
         <div
           style={{
             position: "absolute",
+            top: "50%",
+            left: "50%",
             width: 0,
             height: 0,
-            transform: `translate(${cursorX}px, ${cursorY}px)`,
+            transform: `translate(-50%, -50%) translate(${cursorX}px, ${cursorY}px)`,
             borderLeft: "18px solid transparent",
             borderRight: "18px solid transparent",
             borderTop: `28px solid ${colors.marfim}`,
@@ -84,7 +104,7 @@ export const ClickScene: React.FC = () => {
 
       <AbsoluteFill style={{ backgroundColor: colors.marfim, opacity: flash }} />
 
-      <Caption text="Um clique... e a empresa inteira mudaria de dono." highlight="Um clique" />
+      <Caption text="Um clique, e a empresa inteira mudaria de dono." highlight="Um clique" />
     </AbsoluteFill>
   );
 };

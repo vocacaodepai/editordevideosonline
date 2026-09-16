@@ -22,7 +22,19 @@ export const CliffhangerScene: React.FC = () => {
     extrapolateRight: "clamp",
   });
 
+  const ctaScale = spring({
+    fps,
+    frame: frame - 70,
+    config: { damping: 11, stiffness: 160, mass: 0.6 },
+  });
+
+  const shareOpacity = interpolate(frame, [110, 130], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+  });
+
   const linePulse = 0.5 + 0.5 * Math.sin(frame / 12);
+  const ctaPulse = 1 + 0.04 * Math.sin(frame / 8);
 
   return (
     <AbsoluteFill style={{ backgroundColor: colors.carvao }}>
@@ -62,10 +74,49 @@ export const CliffhangerScene: React.FC = () => {
 
         <div
           style={{
-            marginTop: 18,
+            marginTop: 6,
+            display: "flex",
+            alignItems: "center",
+            gap: 16,
+            backgroundColor: colors.terracota,
+            borderRadius: 999,
+            padding: "20px 44px",
+            transform: `scale(${Math.max(ctaScale, 0) * ctaPulse})`,
+          }}
+        >
+          <span style={{ fontSize: 34 }}>🔔</span>
+          <span
+            style={{
+              fontFamily: bodyFont,
+              fontWeight: 700,
+              fontSize: 34,
+              letterSpacing: 1,
+              color: colors.marfim,
+            }}
+          >
+            SEGUE PARA SABER O FINAL
+          </span>
+        </div>
+
+        <div
+          style={{
+            fontFamily: bodyFont,
+            fontWeight: 400,
+            fontSize: 30,
+            color: colors.marfim,
+            opacity: shareOpacity,
+            letterSpacing: 0.5,
+          }}
+        >
+          📤 Marca alguém que faria igual.
+        </div>
+
+        <div
+          style={{
+            marginTop: 6,
             width: 220,
             height: 4,
-            backgroundColor: colors.terracota,
+            backgroundColor: colors.oliva,
             opacity: 0.4 + linePulse * 0.6,
             borderRadius: 4,
           }}

@@ -29,6 +29,8 @@ export const DeskScene: React.FC = () => {
           style={{
             position: "absolute",
             bottom: 330,
+            left: "50%",
+            transform: "translateX(-50%)",
             width: 520,
             height: 14,
             backgroundColor: colors.cacau,
@@ -40,6 +42,8 @@ export const DeskScene: React.FC = () => {
           style={{
             position: "absolute",
             bottom: 344,
+            left: "50%",
+            transform: "translateX(-50%)",
             width: 220,
             height: 130,
             backgroundColor: colors.carvao,
@@ -47,7 +51,14 @@ export const DeskScene: React.FC = () => {
           }}
         />
 
-        <div style={{ position: "absolute", bottom: 300 }}>
+        <div
+          style={{
+            position: "absolute",
+            bottom: 300,
+            left: "50%",
+            transform: "translateX(-50%)",
+          }}
+        >
           <StickFigure
             armLeftAngle={70 + armBob}
             armRightAngle={70 - armBob}

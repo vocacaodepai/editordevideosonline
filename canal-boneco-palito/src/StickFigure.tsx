@@ -1,5 +1,5 @@
 import React from "react";
-import { colors } from "./theme";
+import { CHARACTER } from "./characterStyle";
 
 type Pose = {
   headY?: number;
@@ -20,9 +20,9 @@ export const StickFigure: React.FC<
   legRightAngle = -10,
   bodyLean = 0,
   scale = 1,
-  stroke = colors.carvao,
+  stroke = CHARACTER.stroke,
 }) => {
-  const strokeWidth = 9;
+  const strokeWidth = CHARACTER.strokeWidth;
   const hipX = 100;
   const hipY = 210;
   const shoulderX = 100 + bodyLean;
@@ -51,14 +51,14 @@ export const StickFigure: React.FC<
       <circle
         cx={shoulderX}
         cy={55 + headY}
-        r={34}
+        r={CHARACTER.headRadius}
         fill="none"
         stroke={stroke}
         strokeWidth={strokeWidth}
       />
       <line
         x1={shoulderX}
-        y1={89 + headY}
+        y1={55 + headY + CHARACTER.headRadius}
         x2={shoulderX}
         y2={hipY}
         stroke={stroke}
