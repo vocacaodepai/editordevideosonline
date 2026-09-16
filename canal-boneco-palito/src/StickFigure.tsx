@@ -11,7 +11,7 @@ type Pose = {
 };
 
 export const StickFigure: React.FC<
-  Pose & { scale?: number; stroke?: string }
+  Pose & { scale?: number; stroke?: string; accentColor?: string }
 > = ({
   headY = 0,
   armLeftAngle = 20,
@@ -21,6 +21,7 @@ export const StickFigure: React.FC<
   bodyLean = 0,
   scale = 1,
   stroke = CHARACTER.stroke,
+  accentColor,
 }) => {
   const strokeWidth = CHARACTER.strokeWidth;
   const hipX = 100;
@@ -101,6 +102,12 @@ export const StickFigure: React.FC<
         strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
+      {accentColor && (
+        <polygon
+          points={`${shoulderX - 8},${55 + headY + CHARACTER.headRadius + 4} ${shoulderX + 8},${55 + headY + CHARACTER.headRadius + 4} ${shoulderX},${55 + headY + CHARACTER.headRadius + 48}`}
+          fill={accentColor}
+        />
+      )}
     </svg>
   );
 };
