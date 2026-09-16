@@ -1,76 +1,120 @@
-On the eighteenth of June, 2020, a group of auditors at Ernst and Young refused to sign a document.
+On the eighteenth of June, 2020, a group of auditors refused to sign a document.
 That refusal ended a company that, eighteen months earlier, had been worth more than Deutsche Bank.
 The reason was simple, and almost impossible to believe.
 One point nine billion euros were missing.
 Not misplaced. Not frozen. Missing.
-That money represented roughly a quarter of everything Wirecard claimed to own.
+That money was roughly a quarter of everything Wirecard claimed to own.
 And within days, the company would admit the cash had probably never existed at all.
 This is how Germany's most celebrated technology company turned out to be a crime scene.
 And how the people who tried to warn everyone were the ones investigated first.
+To understand the fall, you have to understand how high it got.
 Wirecard started in 1999, processing online payments out of a suburb of Munich.
-For most of its life, it was an unremarkable middleman, taking a cut of card transactions.
-Then, in the twenty tens, it started growing faster than anything else in German technology.
-Acquisitions across Asia. Revenue climbing every quarter. A stock that would not stop rising.
+For most of its life it was a middleman, taking a small cut of card transactions.
+Unglamorous work. Enormous volume. A business almost nobody outside finance thought about.
+Then, through the twenty tens, it started growing faster than anything else in German technology.
+Acquisitions across Asia. Revenue climbing every single quarter.
+A share price that behaved less like a payments company and more like a tech stock.
 On the twenty fourth of September, 2018, Wirecard entered the DAX, Germany's blue chip index.
-It took the place of Commerzbank, a bank founded in 1870.
+It took the seat of Commerzbank, a bank founded in 1870.
+A hundred and forty eight years of banking history, replaced by a payments firm from the suburbs.
 At that moment, Wirecard was valued at around twenty four point six billion euros.
-More than Deutsche Bank, the largest lender in the country.
-A payments company from the Munich suburbs was now worth more than Germany's biggest bank.
-For German finance, this was a national success story. And nobody wanted to look too closely at it.
-To understand what broke, you have to understand one piece of the structure.
+That was more than Deutsche Bank, the largest lender in the country.
+Analysts called it the German answer to Silicon Valley.
+Politicians pointed at it as proof that Europe could still build something.
+For German finance, this was a national success story.
+And nobody wanted to look too closely at a national success story.
+Now, the part that actually broke.
 A large share of Wirecard's business supposedly ran through what it called third party acquirers.
-These were outside partners in Asia that processed payments on Wirecard's behalf.
-And the profits from that business, Wirecard said, sat in trustee accounts in the Philippines.
-Money the company owned, held by someone else, on the other side of the world.
+The logic sounded reasonable. In countries where Wirecard did not hold a licence, local partners processed payments on its behalf.
+Wirecard booked the profits from those partners as its own.
+And those profits, the company said, sat in trustee accounts in the Philippines.
+Money the company owned, held by someone else, ten thousand kilometres away.
 On the balance sheet, that was one point nine billion euros of cash.
-The most important number in the company was also the hardest number for anyone to actually see.
-Which brings us to the journalist.
-Dan McCrum, a reporter at the Financial Times, had been investigating Wirecard's accounting since the middle of the twenty tens.
-He had documents. He had a whistleblower in Singapore.
-And over several years, the Financial Times published a series of reports on irregularities inside the company's Asian operations.
+Here is what matters about that number.
+It was not a side business. Analysts estimated the third party operation generated the majority of Wirecard's reported profit.
+So the most important part of the company was also the part nobody outside could actually see.
+Confirming cash that size normally means asking the bank that holds it, directly.
+The documents that were supposed to prove these balances later turned out to be forgeries.
+Which brings us to a lawyer in Singapore.
+Pav Gill worked in Wirecard's legal department there.
+He started looking into what appeared to be manipulated accounts and fictitious transactions.
+According to his account, his internal investigation was shut down.
+So he took the documents somewhere else.
+They reached Dan McCrum, a reporter at the Financial Times, who had been examining Wirecard's accounting for years.
+And the Financial Times began publishing.
+In February 2019, Singapore police raided Wirecard's offices in the city.
+At that point, this was no longer a reporter's theory. It was a police matter in a second country.
+Singapore prosecutors would later bring charges connected to the case.
+A businessman linked to the scheme was sentenced to twelve months in jail.
+And the executive investigators named as the architect of the Asian accounting was never caught.
+An Interpol red notice was issued for him. He remains at large.
 What happened next is the part of this story that should worry you the most.
-Wirecard did not just deny the reporting.
-The company said it was the victim of market manipulation, of short sellers working with journalists.
-And Germany's financial regulator, BaFin, agreed with the company.
+Wirecard did not simply deny the reporting.
+The company said it was the victim of market manipulation, of short sellers working together with journalists.
+And Germany's financial regulator, BaFin, took the company's side.
 In February 2019, BaFin did two things at the same time.
 First, it banned short selling of Wirecard shares for two months.
 That had never happened before. Not once, for a single company, in the regulator's history.
-Second, it filed criminal complaints against the Financial Times journalists who were investigating the company.
-Read that again. The regulator protected the company, and went after the reporters.
-The market took the hint. Questioning Wirecard was now, officially, the suspicious activity.
+Second, it filed criminal complaints against the Financial Times journalists investigating the company.
+Read that again. The regulator shielded the company, and went after the reporters.
+Think about what that signals to every other analyst, investor and journalist watching.
+Questioning Wirecard was now, officially, the suspicious activity.
 The company then hired KPMG to run a special audit, specifically to prove the Financial Times wrong.
-The report landed in April 2020, and it did not do that.
-KPMG said it could not verify the third party business. It flagged weaknesses in record keeping.
-And it raised new questions that had not been asked before.
-A special audit commissioned to end the story had just extended it.
-Two months later, the ending arrived in seven days.
+The report arrived in April 2020, and it did not do that.
+KPMG said it could not verify the third party business.
+It flagged weaknesses in record keeping at a regulated financial institution.
+And it raised new questions nobody had asked before.
+An audit commissioned to close the story had just extended it.
+Two months later, the ending arrived, and it took seven days.
 June eighteenth. Ernst and Young refuses to sign off on the annual accounts.
-The reason given is that it cannot confirm the existence of one point nine billion euros.
-The stock falls as much as sixty seven percent in a single session, the worst day in the company's history.
+The stated reason is that it cannot confirm the existence of one point nine billion euros.
+The stock falls as much as sixty seven percent in a single session. The worst day in the company's history.
 June nineteenth. Markus Braun, chief executive for eighteen years, resigns.
+The same day, two Philippine banks make a statement of their own.
+BDO Unibank and the Bank of the Philippine Islands say the documents supposedly proving those accounts were falsified.
+One of them said the papers carried forged signatures of its own bank officers.
+The paperwork behind a quarter of a DAX company's balance sheet was fake.
 June twenty second. Wirecard issues a statement.
 The one point nine billion euros, it says, probably does not exist.
 Not lost. Not stolen in transit. Never there.
 June twenty third. Markus Braun is arrested, accused of inflating the balance sheet.
 June twenty fifth. Wirecard files for insolvency in a Munich court.
-It becomes the first company in the history of the DAX to fail while in the index.
-Over the course of the scandal, the share price fell more than ninety percent.
-Roughly seventeen billion euros in market value simply stopped existing.
-And the money? The central bank of the Philippines said the funds never entered the country's financial system.
-The trustee accounts that held a quarter of Wirecard's balance sheet appear to have been a fiction.
-There is one person still missing from this story.
+It becomes the first company in the history of the DAX to fail while sitting in the index.
+Across the scandal, the share price fell more than ninety percent.
+Roughly seventeen billion euros of market value simply stopped existing.
+Pension funds held it. Index funds held it, automatically, because it was in the DAX.
+Ordinary savers who had never heard the name Wirecard owned a piece of it.
+That is what index investing means when the index itself is wrong.
+The central bank of the Philippines confirmed the money never entered the country's financial system.
+It later barred two bank employees connected to the fraud from working in finance.
+But the people who lost money were never going to be made whole.
+The insolvency administrator was left selling the pieces of a company whose largest asset had been imaginary.
+Ernst and Young, the auditor that had signed Wirecard's accounts for years, described it as a sophisticated global fraud.
+Which raises the obvious question about how many years it went unnoticed.
+Ernst and Young had audited Wirecard for roughly a decade before the collapse.
+In every one of those years, the accounts were signed.
+And there is one person still missing from this story.
 Jan Marsalek, the chief operating officer, the executive who ran the Asian business.
-He was suspended, then dismissed, and then he was gone.
-He fled, reportedly to Moscow, and as of today he has not been found.
+He was suspended, then dismissed, and then he was simply gone.
+He is reported to have fled to Moscow. German police still list him as wanted.
 In September 2020, German prosecutors dropped the investigation into the Financial Times journalists.
 The reporting, it turned out, had been fundamentally accurate the entire time.
+In December 2022, Markus Braun went on trial in Munich.
+Prosecutors describe it as the largest accounting fraud in German corporate history.
+Braun denies wrongdoing. A verdict is expected in 2026.
 Sixteen months passed between the regulator filing complaints against those reporters and the company collapsing.
 Sixteen months in which the warning was public, documented, and officially treated as the crime.
-Germany rewrote parts of its financial supervision rules after this.
+Germany rewrote parts of its financial supervision rules afterwards.
 BaFin's leadership was replaced. The audit market was reformed.
-But the deeper lesson is not about German regulation.
+The Financial Times went on to win awards for the reporting that the regulator had tried to criminalise.
+But the deeper lesson here is not really about German regulation.
 It is about what happens when a country decides in advance which story it wants to be true.
-Wirecard was not hidden. It was audited, listed, regulated, and celebrated.
-Every institution built to catch this had access to it, and looked away.
+Wirecard was not hidden in a basement.
+It was audited, listed, regulated, celebrated and covered by the press.
+Every institution built to catch something like this had access to it.
+And each one, in its own way, looked away.
 The fraud did not survive because it was sophisticated.
 It survived because questioning it was more expensive than believing it.
+Wirecard is not really a story about one company that lied.
+It is a story about how many people it takes to believe a lie,
+and how expensive it becomes to be the one person who does not.
