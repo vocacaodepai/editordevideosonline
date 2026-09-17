@@ -106,7 +106,7 @@ const B1Body: React.FC = () => {
         </div>
       </Beat>
 
-      <Beat line={3} dir="up" dist={22}>
+      <Beat line={4} dir="up" dist={22}>
         <Kicker>Missing from the accounts</Kicker>
         <div style={{ marginTop: 6 }}>
           <Counter
@@ -1190,12 +1190,12 @@ const B14Body: React.FC = () => {
           color={colors.terracota}
           note="What was left of it"
         />
-        <div style={{ marginTop: 16 }}>
+        <Beat line={84} dir="up" dist={22} style={{ marginTop: 16 }}>
           <Kicker>Market value destroyed</Kicker>
           <div style={{ marginTop: 4 }}>
             <Counter to={17} prefix="€" suffix=" bn" progress={value.t} size={108} color={colors.terracota} />
           </div>
-        </div>
+        </Beat>
       </div>
 
       <div style={{ flex: 1 }}>
