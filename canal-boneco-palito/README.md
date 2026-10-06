@@ -37,6 +37,18 @@ npx remotion render
 npx remotion upgrade
 ```
 
+## Slideshow de imagens
+
+Composição `Slideshow` (e `SlideshowTeste`, com 3 imagens de exemplo): transforma uma lista de imagens em vídeo com transição entre elas.
+
+```console
+npx remotion render SlideshowTeste out/slideshow-teste.mp4
+# ou com suas imagens (caminhos relativos a public/):
+npx remotion render Slideshow out/meu-video.mp4 --props='{"images":["media/a.jpg","media/b.jpg"],"transitionType":"slide"}'
+```
+
+Props (todas opcionais, menos `images`): `secondsPerImage` (3), `transitionSeconds` (1), `transitionType` (`fade`, `slide`, `wipe`, `flip`, `clockWipe` ou `mix`), `fit` (`contain`/`cover`), `zoom` (0.06; 0 desliga), `background`, `audio`, `audioVolume`, `width`/`height` (1920x1080; use 1080x1920 para vertical). A duração do vídeo é calculada sozinha a partir das props.
+
 ## Docs
 
 Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).
