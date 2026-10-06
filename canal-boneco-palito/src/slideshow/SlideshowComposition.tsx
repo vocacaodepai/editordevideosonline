@@ -271,7 +271,7 @@ export const slideshowTestProps: SlideshowProps = {
   zoom: 0,
   background: "#1a1410",
   audio: "audio/slideshow/leitura-suave.mp3",
-  audioVolume: 0.3,
+  audioVolume: 0.65,
   pageSound: "audio/slideshow/virar-pagina.mp3",
   pageSoundVolume: 0.45,
 };
