@@ -37,17 +37,24 @@ npx remotion render
 npx remotion upgrade
 ```
 
-## Slideshow de imagens
+## Slideshow de imagens / livro em vídeo
 
-Composição `Slideshow` (e `SlideshowTeste`, com 3 imagens de exemplo): transforma uma lista de imagens em vídeo com transição entre elas.
+Composição `Slideshow`: transforma uma lista de imagens em vídeo com transição entre elas. A `SlideshowTeste` já vem configurada como **livro em vídeo**: páginas viram uma a uma, com tempo para ler, música suave e som de papel.
 
 ```console
-npx remotion render SlideshowTeste out/slideshow-teste.mp4
+npx remotion render SlideshowTeste out/livro-teste.mp4
 # ou com suas imagens (caminhos relativos a public/):
 npx remotion render Slideshow out/meu-video.mp4 --props='{"images":["media/a.jpg","media/b.jpg"],"transitionType":"slide"}'
 ```
 
-Props (todas opcionais, menos `images`): `secondsPerImage` (3), `transitionSeconds` (1), `transitionType` (`fade`, `slide`, `wipe`, `flip`, `clockWipe` ou `mix`), `fit` (`contain`/`cover`), `zoom` (0.06; 0 desliga), `background`, `audio`, `audioVolume`, `width`/`height` (1920x1080; use 1080x1920 para vertical). A duração do vídeo é calculada sozinha a partir das props.
+Props (todas opcionais, menos `images`):
+- `secondsPerImage` (3): tempo em que a imagem fica **inteira na tela**, sem contar a transição. É o tempo de leitura. `durations` (lista, em segundos) define um tempo por imagem, por exemplo mais para páginas com muito texto.
+- `transitionType`: `pageTurn` (vira a página; as imagens devem ser o livro aberto, com a lombada no centro), `fade`, `slide`, `wipe`, `flip`, `clockWipe` ou `mix`. `transitionSeconds` (1) define a duração.
+- `coverFirst` (true): com `pageTurn`, a primeira imagem é a capa (página única) e entra com fade.
+- `audio` e `audioVolume`: música em loop, com entrada e saída suaves. `pageSound` e `pageSoundVolume`: som a cada página virada.
+- `fit` (`contain`/`cover`), `zoom` (0.06; use 0 para leitura), `background`, `width`/`height` (1920x1080; 1080x1920 para vertical).
+
+A duração do vídeo é calculada sozinha. A música e o som de página são gerados por `python3 scripts/gerar-musica-leitura.py` (original, sem direitos autorais; precisa de numpy e ffmpeg).
 
 ## Docs
 

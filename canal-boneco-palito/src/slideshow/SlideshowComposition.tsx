@@ -8,12 +8,14 @@ import { slide } from "@remotion/transitions/slide";
 import { wipe } from "@remotion/transitions/wipe";
 import { flip } from "@remotion/transitions/flip";
 import { clockWipe } from "@remotion/transitions/clock-wipe";
+import { pageTurn } from "./PageTurn";
 import {
   AbsoluteFill,
   Audio,
   Composition,
   Img,
   interpolate,
+  Sequence,
   staticFile,
   useCurrentFrame,
   useVideoConfig,
@@ -26,22 +28,40 @@ export type SlideshowTransition =
   | "wipe"
   | "flip"
   | "clockWipe"
+  | "pageTurn"
   | "mix";
 
 export type SlideshowProps = {
   /** Caminhos relativos à pasta public/ (ex.: "media/foto.jpg"). */
   images: string[];
-  /** Quanto tempo cada imagem fica visível, já contando a transição. */
+  /**
+   * Tempo em que cada imagem fica inteira na tela, sem contar as transições.
+   * Para leitura de livro, é o tempo que a pessoa tem para ler a página.
+   */
   secondsPerImage: number;
+  /** Tempo de leitura individual por imagem (mesma ordem de `images`). Sobrepõe `secondsPerImage`. */
+  durations?: number[];
   /** Duração da transição entre duas imagens. */
   transitionSeconds: number;
+  /**
+   * "pageTurn" vira a página do livro aberto (duas páginas lado a lado, lombada no
+   * centro da imagem).
+   */
   transitionType: SlideshowTransition;
+  /**
+   * Com "pageTurn", a primeira imagem é a capa (página única): ela entra na leitura
+   * com fade em vez de virar página.
+   */
+  coverFirst: boolean;
+  /** Som de virar página, tocado a cada "pageTurn". Caminho relativo a public/. */
+  pageSound?: string;
+  pageSoundVolume: number;
   /** "contain" mostra a imagem inteira (com fundo); "cover" preenche e corta. */
   fit: "contain" | "cover";
   /** Zoom lento em cada imagem (efeito Ken Burns). 0 desliga. */
   zoom: number;
   background: string;
-  /** Caminho relativo a public/. Opcional. */
+  /** Música de fundo (repete em loop). Caminho relativo a public/. Opcional. */
   audio?: string;
   audioVolume: number;
   width: number;
@@ -51,8 +71,12 @@ export type SlideshowProps = {
 export const slideshowDefaults: SlideshowProps = {
   images: [],
   secondsPerImage: 3,
+  durations: undefined,
   transitionSeconds: 1,
   transitionType: "fade",
+  coverFirst: true,
+  pageSound: undefined,
+  pageSoundVolume: 0.5,
   fit: "contain",
   zoom: 0.06,
   background: "#000000",
@@ -66,23 +90,31 @@ const FPS = 30;
 
 const framesOf = (seconds: number) => Math.max(1, Math.round(seconds * FPS));
 
-// A transição precisa ser mais curta que a imagem, senão as cenas se sobrepõem
-// por inteiro e a duração fica negativa.
-const resolveFrames = (p: SlideshowProps) => {
-  const perImage = framesOf(p.secondsPerImage);
-  const maxTransition = Math.max(1, Math.floor(perImage / 2));
+// Calcula a linha do tempo. Cada imagem fica inteira na tela pelo tempo pedido
+// e o trecho de transição entra a mais, nos dois lados dela. A transição é
+// limitada ao menor tempo de leitura, senão as cenas se sobrepõem por inteiro.
+const resolveTimeline = (p: SlideshowProps) => {
+  const n = p.images.length;
+  const reads = p.images.map((_, i) => framesOf(p.durations?.[i] ?? p.secondsPerImage));
+  const shortest = reads.length ? Math.min(...reads) : framesOf(p.secondsPerImage);
   const overlapFrames =
-    p.images.length < 2
-      ? 0
-      : Math.min(Math.max(1, Math.round(p.transitionSeconds * FPS)), maxTransition);
-  return { perImage, overlapFrames };
+    n < 2 ? 0 : Math.min(Math.max(1, Math.round(p.transitionSeconds * FPS)), shortest);
+
+  const sequences = reads.map(
+    (read, i) => read + (i > 0 ? overlapFrames : 0) + (i < n - 1 ? overlapFrames : 0),
+  );
+  // Frame em que a transição entre a imagem i e a i+1 começa.
+  const transitionStarts: number[] = [];
+  let start = 0;
+  for (let i = 0; i < n - 1; i++) {
+    transitionStarts.push(start + sequences[i] - overlapFrames);
+    start += sequences[i] - overlapFrames;
+  }
+  const total = sequences.reduce((a, b) => a + b, 0) - Math.max(0, n - 1) * overlapFrames;
+  return { sequences, overlapFrames, transitionStarts, total: Math.max(1, total) };
 };
 
-export const slideshowDuration = (p: SlideshowProps) => {
-  const { perImage, overlapFrames } = resolveFrames(p);
-  const n = Math.max(1, p.images.length);
-  return n * perImage - (n - 1) * overlapFrames;
-};
+export const slideshowDuration = (p: SlideshowProps) => resolveTimeline(p).total;
 
 const MIX_ORDER: SlideshowTransition[] = ["fade", "slide", "wipe", "fade", "flip"];
 
@@ -100,6 +132,8 @@ const presentationFor = (
       return wipe({ direction: index % 2 === 0 ? "from-left" : "from-right" });
     case "flip":
       return flip();
+    case "pageTurn":
+      return pageTurn();
     case "clockWipe":
       return clockWipe(size);
     case "fade":
@@ -139,23 +173,48 @@ const Slide: React.FC<{
 };
 
 export const SlideshowVideo: React.FC<SlideshowProps> = (props) => {
-  const { width, height } = useVideoConfig();
-  const { perImage, overlapFrames } = resolveFrames(props);
+  const { width, height, durationInFrames } = useVideoConfig();
+  const { sequences, overlapFrames, transitionStarts } = resolveTimeline(props);
+
+  // Música entra e sai devagar para não chamar atenção.
+  const fadeIn = 2 * FPS;
+  const fadeOut = 3 * FPS;
+  const musicVolume = (f: number) =>
+    props.audioVolume *
+    interpolate(
+      f,
+      [0, fadeIn, durationInFrames - fadeOut, durationInFrames],
+      [0, 1, 1, 0],
+      { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
+    );
+
+  // Com capa, a primeira transição é um fade; só as demais viram página.
+  const kindAt = (i: number): SlideshowTransition =>
+    props.transitionType === "pageTurn" && props.coverFirst && i === 0
+      ? "fade"
+      : props.transitionType;
 
   return (
     <AbsoluteFill style={{ backgroundColor: props.background }}>
-      {props.audio ? (
-        <Audio src={staticFile(props.audio)} volume={() => props.audioVolume} />
-      ) : null}
+      {props.audio ? <Audio src={staticFile(props.audio)} loop volume={musicVolume} /> : null}
+      {props.pageSound
+        ? transitionStarts.map((from, i) =>
+            kindAt(i) === "pageTurn" ? (
+              <Sequence key={`snd-${i}`} from={from} durationInFrames={FPS * 2}>
+                <Audio src={staticFile(props.pageSound!)} volume={() => props.pageSoundVolume} />
+              </Sequence>
+            ) : null,
+          )
+        : null}
       <TransitionSeries>
         {props.images.flatMap((src, i) => {
           const items = [
-            <TransitionSeries.Sequence key={`s-${i}`} durationInFrames={perImage}>
+            <TransitionSeries.Sequence key={`s-${i}`} durationInFrames={sequences[i]}>
               <Slide
                 src={src}
                 fit={props.fit}
                 zoom={props.zoom}
-                durationInFrames={perImage}
+                durationInFrames={sequences[i]}
                 index={i}
               />
             </TransitionSeries.Sequence>,
@@ -164,7 +223,7 @@ export const SlideshowVideo: React.FC<SlideshowProps> = (props) => {
             items.push(
               <TransitionSeries.Transition
                 key={`t-${i}`}
-                presentation={presentationFor(props.transitionType, i, { width, height })}
+                presentation={presentationFor(kindAt(i), i, { width, height })}
                 timing={linearTiming({ durationInFrames: overlapFrames })}
               />,
             );
@@ -197,7 +256,7 @@ export const Slideshow = () => {
   );
 };
 
-/** Teste: capa + folha de rosto + créditos de "O Filho do Grúfalo". */
+/** Teste: capa + folha de rosto + créditos de "O Filho do Grúfalo", lidos como livro. */
 export const slideshowTestProps: SlideshowProps = {
   ...slideshowDefaults,
   images: [
@@ -205,6 +264,16 @@ export const slideshowTestProps: SlideshowProps = {
     "media/slideshow-teste/02-folha-de-rosto.png",
     "media/slideshow-teste/03-creditos.png",
   ],
+  // Capa rápida; folha de rosto e créditos têm mais texto para ler.
+  durations: [4, 6, 8],
+  transitionType: "pageTurn",
+  transitionSeconds: 1.4,
+  zoom: 0,
+  background: "#1a1410",
+  audio: "audio/slideshow/leitura-suave.mp3",
+  audioVolume: 0.3,
+  pageSound: "audio/slideshow/virar-pagina.mp3",
+  pageSoundVolume: 0.45,
 };
 
 export const SlideshowTest = () => {
