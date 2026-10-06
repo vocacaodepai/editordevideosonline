@@ -273,7 +273,7 @@ export const slideshowTestProps: SlideshowProps = {
   audio: "audio/slideshow/chopin-noturno-op9-n2.mp3",
   audioVolume: 0.55,
   pageSound: "audio/slideshow/virar-pagina.mp3",
-  pageSoundVolume: 1,
+  pageSoundVolume: 0.65,
 };
 
 export const SlideshowTest = () => {
