@@ -116,19 +116,48 @@ def music(total_seconds=96):
     return mix
 
 
-def page_turn(seconds=0.9):
-    """Um 'fshhh' curto e macio de papel, sem estalo."""
+def page_turn(seconds=1.3):
+    """Folha de papel virando: estalos leves ao se soltar, o 'fshhh' no meio do
+    movimento e um toque macio ao pousar. Sincronizado com a animação (a folha
+    passa pela vertical perto de 50% do som)."""
     n = int(seconds * SR)
-    noise = rng.standard_normal(n)
-    spec = np.fft.rfft(noise)
+    t = np.arange(n) / SR
     freqs = np.fft.rfftfreq(n, 1 / SR)
-    band = np.exp(-(((freqs - 3200) / 2200) ** 2))  # passa-banda ao redor de 3 kHz
-    sh = np.fft.irfft(spec * band, n)
-    tt = np.arange(n) / n
-    env = np.sin(np.pi * np.clip(tt, 0, 1)) ** 2.2 * (1 - 0.35 * tt)
-    sh = sh * env
-    sh /= np.max(np.abs(sh)) / 0.5
-    return np.stack([sh, sh], axis=1)
+
+    def band(x, center, width):
+        return np.fft.irfft(np.fft.rfft(x) * np.exp(-(((freqs - center) / width) ** 2)), n)
+
+    # 'fshhh' do ar sob a folha, com pico em ~50% do som
+    air = band(rng.standard_normal(n), 3500, 2600)
+    air_env = np.exp(-(((t - 0.55 * seconds) / (0.2 * seconds)) ** 2))
+    air = air * air_env * 0.9
+
+    # textura do papel: estalos curtos, mais frequentes ao se soltar e no meio
+    crackle = np.zeros(n)
+    density = 0.0016 + 0.004 * np.exp(-(((t - 0.12) / 0.12) ** 2)) + 0.002 * air_env
+    hits = rng.random(n) < density
+    crackle[hits] = rng.standard_normal(hits.sum())
+    crackle = band(crackle, 5500, 4000)
+    crackle *= np.exp(-t / 0.7) * 1.4
+
+    # toque macio ao pousar sobre a outra página
+    thump = np.zeros(n)
+    land = int(0.88 * seconds * SR)
+    m = n - land
+    tt = np.arange(m) / SR
+    burst = band_low(rng.standard_normal(m), 220)
+    thump[land:] = burst * np.exp(-tt / 0.05) * 0.8
+
+    x = air + crackle + thump
+    x *= np.minimum(t / 0.01, 1) * np.minimum((seconds - t) / 0.08, 1)  # sem estalo no começo e no fim
+    x /= np.max(np.abs(x)) / 0.9
+    return np.stack([x, x], axis=1)
+
+
+def band_low(x, cutoff):
+    spec = np.fft.rfft(x)
+    f = np.fft.rfftfreq(x.size, 1 / SR)
+    return np.fft.irfft(spec * (f < cutoff), x.size)
 
 
 if __name__ == "__main__":

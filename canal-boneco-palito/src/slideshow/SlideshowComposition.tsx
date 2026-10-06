@@ -199,8 +199,8 @@ export const SlideshowVideo: React.FC<SlideshowProps> = (props) => {
       {props.audio ? <Audio src={staticFile(props.audio)} loop volume={musicVolume} /> : null}
       {props.pageSound
         ? transitionStarts.map((from, i) =>
-            kindAt(i) === "pageTurn" ? (
-              <Sequence key={`snd-${i}`} from={from} durationInFrames={FPS * 2}>
+            props.transitionType === "pageTurn" ? (
+              <Sequence key={`snd-${i}`} from={from + 3} durationInFrames={FPS * 2}>
                 <Audio src={staticFile(props.pageSound!)} volume={() => props.pageSoundVolume} />
               </Sequence>
             ) : null,
@@ -273,7 +273,7 @@ export const slideshowTestProps: SlideshowProps = {
   audio: "audio/slideshow/leitura-suave.mp3",
   audioVolume: 0.65,
   pageSound: "audio/slideshow/virar-pagina.mp3",
-  pageSoundVolume: 0.45,
+  pageSoundVolume: 0.6,
 };
 
 export const SlideshowTest = () => {
