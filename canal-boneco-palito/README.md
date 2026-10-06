@@ -54,7 +54,7 @@ Props (todas opcionais, menos `images`):
 - `audio` e `audioVolume`: música em loop, com entrada e saída suaves. `pageSound` e `pageSoundVolume`: som a cada página virada.
 - `fit` (`contain`/`cover`), `zoom` (0.06; use 0 para leitura), `background`, `width`/`height` (1920x1080; 1080x1920 para vertical).
 
-A duração do vídeo é calculada sozinha. A música e o som de página são gerados por `python3 scripts/gerar-musica-leitura.py` (original, sem direitos autorais; precisa de numpy e ffmpeg).
+A duração do vídeo é calculada sozinha. A música (Chopin, Noturno Op. 9 nº 2, gravação Musopen) e o som de página (gravação real) são de domínio público/CC0. Fontes e edição em `public/audio/slideshow/LICENCAS.md`.
 
 ## Docs
 

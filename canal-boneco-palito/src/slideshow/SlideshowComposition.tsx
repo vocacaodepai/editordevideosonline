@@ -270,10 +270,10 @@ export const slideshowTestProps: SlideshowProps = {
   transitionSeconds: 1.4,
   zoom: 0,
   background: "#1a1410",
-  audio: "audio/slideshow/leitura-suave.mp3",
-  audioVolume: 0.65,
+  audio: "audio/slideshow/chopin-noturno-op9-n2.mp3",
+  audioVolume: 0.55,
   pageSound: "audio/slideshow/virar-pagina.mp3",
-  pageSoundVolume: 0.6,
+  pageSoundVolume: 1,
 };
 
 export const SlideshowTest = () => {
