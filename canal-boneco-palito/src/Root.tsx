@@ -3,7 +3,7 @@ import { MyComposition } from "./Composition";
 import { StoryVideo } from "./story/StoryComposition";
 import { InfographicVideo } from "./infographic/InfographicComposition";
 import { WirecardVideo } from "./wirecard/WirecardEpisode";
-import { Slideshow, SlideshowTest } from "./slideshow/SlideshowComposition";
+import { Livro, Slideshow, SlideshowTest } from "./slideshow/SlideshowComposition";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -14,6 +14,7 @@ export const RemotionRoot: React.FC = () => {
       <WirecardVideo />
       <Slideshow />
       <SlideshowTest />
+      <Livro />
     </>
   );
 };

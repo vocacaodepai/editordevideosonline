@@ -56,6 +56,20 @@ Props (todas opcionais, menos `images`):
 
 A duração do vídeo é calculada sozinha. A música (Chopin, Noturno Op. 9 nº 2, gravação Musopen) e o som de página (gravação real) são de domínio público/CC0. Fontes e edição em `public/audio/slideshow/LICENCAS.md`.
 
+## Vídeo de livro (passo a passo)
+
+1. Coloque as imagens em `public/livros/<slug>/`, uma por página dupla, com o nome pela numeração do livro (`04-05.jpg`, `06-07.jpg`...). Capa e contracapa são páginas únicas.
+2. Crie `livros/<slug>/livro.json` na ordem de leitura. Cada página tem `arquivo`, `rotulo` e `palavras` (só as da história: sem direitos, ISBN, ficha catalográfica, selo FSC, editora ou crédito de tradução). Use `segundos` para fixar o tempo à mão, `"tipo": "capa"` ou `"contracapa"` para página única e `"fit": "contain"` para imagem que não é 16:9.
+3. `node scripts/renderizar-livro.mjs <slug> --so-lista` mostra os tempos; sem a flag, renderiza em `out/<slug>.mp4`. Exemplo pronto: `livros/macaco-danado/livro.json`.
+
+**Tempo de leitura** (`scripts/tempo-leitura.mjs`): 3s de base mais 0,35s por palavra (cerca de 170 palavras por minuto).
+
+| Palavras | 0 | 1-8 | 9-16 | 17-25 | 26-35 | 36-50 | 51-70 | 70+ |
+|---|---|---|---|---|---|---|---|---|
+| Segundos | 4 | 6 | 8 | 11 | 14 | 18 | 23 | 23 + 0,35 por palavra extra |
+
+Capa 5s, folha de rosto 6s, página só de créditos 5s.
+
 ## Docs
 
 Get started with Remotion by reading the [fundamentals page](https://www.remotion.dev/docs/the-fundamentals).

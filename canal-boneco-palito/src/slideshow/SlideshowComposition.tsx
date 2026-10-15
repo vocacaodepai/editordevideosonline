@@ -53,6 +53,13 @@ export type SlideshowProps = {
    * com fade em vez de virar página.
    */
   coverFirst: boolean;
+  /**
+   * Índices das imagens de página única (capa, contracapa, ilustração solta).
+   * Qualquer transição que toque nelas usa fade em vez de virar página.
+   */
+  singles?: number[];
+  /** Ajuste individual por imagem (índice → "contain" | "cover"). Sobrepõe `fit`. */
+  slideFit?: Record<number, "contain" | "cover">;
   /** Som de virar página, tocado a cada "pageTurn". Caminho relativo a public/. */
   pageSound?: string;
   pageSoundVolume: number;
@@ -159,6 +166,19 @@ const Slide: React.FC<{
 
   return (
     <AbsoluteFill style={{ overflow: "hidden" }}>
+      {fit === "contain" ? (
+        // Imagem inteira com sobra nas laterais: preenche com uma cópia desfocada.
+        <Img
+          src={staticFile(src)}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            filter: "blur(36px) brightness(0.85)",
+            transform: "scale(1.15)",
+          }}
+        />
+      ) : null}
       <Img
         src={staticFile(src)}
         style={{
@@ -189,8 +209,10 @@ export const SlideshowVideo: React.FC<SlideshowProps> = (props) => {
     );
 
   // Com capa, a primeira transição é um fade; só as demais viram página.
+  const isSingle = (i: number) =>
+    (props.coverFirst && i === 0) || (props.singles ?? []).includes(i);
   const kindAt = (i: number): SlideshowTransition =>
-    props.transitionType === "pageTurn" && props.coverFirst && i === 0
+    props.transitionType === "pageTurn" && (isSingle(i) || isSingle(i + 1))
       ? "fade"
       : props.transitionType;
 
@@ -212,7 +234,7 @@ export const SlideshowVideo: React.FC<SlideshowProps> = (props) => {
             <TransitionSeries.Sequence key={`s-${i}`} durationInFrames={sequences[i]}>
               <Slide
                 src={src}
-                fit={props.fit}
+                fit={props.slideFit?.[i] ?? props.fit}
                 zoom={props.zoom}
                 durationInFrames={sequences[i]}
                 index={i}
@@ -256,16 +278,10 @@ export const Slideshow = () => {
   );
 };
 
-/** Teste: capa + folha de rosto + créditos de "O Filho do Grúfalo", lidos como livro. */
-export const slideshowTestProps: SlideshowProps = {
+/** Padrão dos vídeos de livro: páginas viram, música suave ao fundo, som de papel. */
+export const livroDefaults: SlideshowProps = {
   ...slideshowDefaults,
-  images: [
-    "media/slideshow-teste/01-capa.png",
-    "media/slideshow-teste/02-folha-de-rosto.png",
-    "media/slideshow-teste/03-creditos.png",
-  ],
-  // Capa rápida; folha de rosto e créditos têm mais texto para ler.
-  durations: [4, 6, 8],
+  fit: "cover",
   transitionType: "pageTurn",
   transitionSeconds: 1.4,
   zoom: 0,
@@ -274,6 +290,35 @@ export const slideshowTestProps: SlideshowProps = {
   audioVolume: 0.55,
   pageSound: "audio/slideshow/virar-pagina.mp3",
   pageSoundVolume: 0.65,
+};
+
+/** Os livros reais passam `images`, `durations` etc. por --props (ver scripts/renderizar-livro.mjs). */
+export const Livro = () => {
+  return (
+    <Composition
+      id="Livro"
+      component={SlideshowVideo}
+      durationInFrames={slideshowDuration(livroDefaults)}
+      fps={FPS}
+      width={livroDefaults.width}
+      height={livroDefaults.height}
+      defaultProps={livroDefaults}
+      calculateMetadata={calculateMetadata}
+    />
+  );
+};
+
+/** Teste: capa + folha de rosto + créditos de "O Filho do Grúfalo", lidos como livro. */
+export const slideshowTestProps: SlideshowProps = {
+  ...livroDefaults,
+  fit: "contain",
+  images: [
+    "media/slideshow-teste/01-capa.png",
+    "media/slideshow-teste/02-folha-de-rosto.png",
+    "media/slideshow-teste/03-creditos.png",
+  ],
+  // Capa rápida; folha de rosto e créditos têm mais texto para ler.
+  durations: [4, 6, 8],
 };
 
 export const SlideshowTest = () => {

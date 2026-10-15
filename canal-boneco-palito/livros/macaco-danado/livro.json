@@ -1,0 +1,19 @@
+{
+  "titulo": "Macaco Danado (Julia Donaldson e Axel Scheffler)",
+  "paginas": [
+    { "arquivo": "00-capa.jpg", "rotulo": "Capa", "tipo": "capa", "segundos": 5 },
+    { "arquivo": "01-folha-de-rosto.jpg", "rotulo": "Folha de rosto", "segundos": 6 },
+    { "arquivo": "02-direitos-dedicatoria.jpg", "rotulo": "Direitos e dedicatória", "palavras": 6 },
+    { "arquivo": "04-05.jpg", "rotulo": "Págs. 4-5", "palavras": 4 },
+    { "arquivo": "06-07.jpg", "rotulo": "Págs. 6-7", "palavras": 43 },
+    { "arquivo": "08-09.jpg", "rotulo": "Págs. 8-9", "palavras": 46 },
+    { "arquivo": "10-11.jpg", "rotulo": "Págs. 10-11", "palavras": 45 },
+    { "arquivo": "12-13.jpg", "rotulo": "Págs. 12-13", "palavras": 51 },
+    { "arquivo": "14-15.jpg", "rotulo": "Págs. 14-15", "palavras": 50 },
+    { "arquivo": "22-23.jpg", "rotulo": "Págs. 22-23", "palavras": 21 },
+    { "arquivo": "24-25.jpg", "rotulo": "Págs. 24-25", "palavras": 20 },
+    { "arquivo": "26-27.jpg", "rotulo": "Págs. 26-27", "palavras": 1 },
+    { "arquivo": "98-sobre-os-autores.jpg", "rotulo": "Sobre os autores", "segundos": 5 },
+    { "arquivo": "99-contracapa.jpg", "rotulo": "Contracapa", "tipo": "contracapa", "segundos": 6, "fit": "contain" }
+  ]
+}
