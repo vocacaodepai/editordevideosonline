@@ -99,7 +99,16 @@ const PageTurnPresentation: React.FC<
       {entering ? (
         <>
           {/* Metade direita nova, por baixo da folha que ainda cobre ela. */}
-          <div style={{ position: "absolute", top: 0, bottom: 0, left: width / 2, width: width / 2, zIndex: 1 }}>
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: width / 2,
+              width: width / 2,
+              zIndex: 1,
+            }}
+          >
             <Half side="right" width={width}>
               {children}
             </Half>
@@ -130,7 +139,16 @@ const PageTurnPresentation: React.FC<
       ) : (
         <>
           {/* Metade esquerda antiga, que fica até o verso da folha pousar. */}
-          <div style={{ position: "absolute", top: 0, bottom: 0, left: 0, width: width / 2, zIndex: 1 }}>
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              width: width / 2,
+              zIndex: 1,
+            }}
+          >
             <Half side="left" width={width}>
               {children}
             </Half>

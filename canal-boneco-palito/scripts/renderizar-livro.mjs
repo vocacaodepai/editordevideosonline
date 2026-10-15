@@ -14,6 +14,10 @@ if (!slug) {
 }
 
 const livro = JSON.parse(readFileSync(`livros/${slug}/livro.json`, "utf8"));
+// Encerramento: texto padrão de livros/encerramento-padrao.json, que cada livro pode
+// trocar com a chave "encerramento" (use "encerramento": false para não ter quadro).
+const padrao = JSON.parse(readFileSync("livros/encerramento-padrao.json", "utf8"));
+const enc = livro.encerramento === false ? null : { ...padrao, ...(livro.encerramento ?? {}) };
 const images = [];
 const durations = [];
 const singles = [];
@@ -31,13 +35,24 @@ livro.paginas.forEach((p, i) => {
   console.log(`${rotulo} ${String(p.palavras ?? "-").padStart(4)}  ${String(segundos).padStart(5)}s`);
 });
 const leitura = durations.reduce((a, b) => a + b, 0);
-console.log(`\nleitura: ${leitura}s (${(leitura / 60).toFixed(1)} min), fora as viradas\n`);
+console.log(`\nleitura: ${leitura}s (${(leitura / 60).toFixed(1)} min), fora as viradas`);
+if (enc) console.log(`encerramento: "${enc.titulo}" (${enc.segundos}s)`);
+console.log();
 
 if (flags.includes("--so-lista")) process.exit(0);
 
 mkdirSync("out", { recursive: true });
 const propsFile = `out/${slug}-props.json`;
-writeFileSync(propsFile, JSON.stringify({ images, durations, singles, slideFit }, null, 2));
+const endCard = enc
+  ? {
+      title: enc.titulo,
+      subtitle: enc.subtitulo,
+      footer: enc.rodape,
+      seconds: enc.segundos,
+      background: `livros/${slug}/${enc.fundo ?? livro.paginas[0].arquivo}`,
+    }
+  : undefined;
+writeFileSync(propsFile, JSON.stringify({ images, durations, singles, slideFit, endCard }, null, 2));
 
 const r = spawnSync(
   "npx",

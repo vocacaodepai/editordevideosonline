@@ -9,6 +9,7 @@ import { wipe } from "@remotion/transitions/wipe";
 import { flip } from "@remotion/transitions/flip";
 import { clockWipe } from "@remotion/transitions/clock-wipe";
 import { pageTurn } from "./PageTurn";
+import { EndCard, type EndCardProps } from "./EndCard";
 import {
   AbsoluteFill,
   Audio,
@@ -60,6 +61,8 @@ export type SlideshowProps = {
   singles?: number[];
   /** Ajuste individual por imagem (índice → "contain" | "cover"). Sobrepõe `fit`. */
   slideFit?: Record<number, "contain" | "cover">;
+  /** Quadro de encerramento depois da última imagem (entra com fade). */
+  endCard?: EndCardProps;
   /** Som de virar página, tocado a cada "pageTurn". Caminho relativo a public/. */
   pageSound?: string;
   pageSoundVolume: number;
@@ -101,14 +104,22 @@ const framesOf = (seconds: number) => Math.max(1, Math.round(seconds * FPS));
 // e o trecho de transição entra a mais, nos dois lados dela. A transição é
 // limitada ao menor tempo de leitura, senão as cenas se sobrepõem por inteiro.
 const resolveTimeline = (p: SlideshowProps) => {
-  const n = p.images.length;
-  const reads = p.images.map((_, i) => framesOf(p.durations?.[i] ?? p.secondsPerImage));
-  const shortest = reads.length ? Math.min(...reads) : framesOf(p.secondsPerImage);
+  const reads = p.images.map((_, i) =>
+    framesOf(p.durations?.[i] ?? p.secondsPerImage),
+  );
+  if (p.endCard) reads.push(framesOf(p.endCard.seconds));
+  const n = reads.length;
+  const shortest = reads.length
+    ? Math.min(...reads)
+    : framesOf(p.secondsPerImage);
   const overlapFrames =
-    n < 2 ? 0 : Math.min(Math.max(1, Math.round(p.transitionSeconds * FPS)), shortest);
+    n < 2
+      ? 0
+      : Math.min(Math.max(1, Math.round(p.transitionSeconds * FPS)), shortest);
 
   const sequences = reads.map(
-    (read, i) => read + (i > 0 ? overlapFrames : 0) + (i < n - 1 ? overlapFrames : 0),
+    (read, i) =>
+      read + (i > 0 ? overlapFrames : 0) + (i < n - 1 ? overlapFrames : 0),
   );
   // Frame em que a transição entre a imagem i e a i+1 começa.
   const transitionStarts: number[] = [];
@@ -117,13 +128,26 @@ const resolveTimeline = (p: SlideshowProps) => {
     transitionStarts.push(start + sequences[i] - overlapFrames);
     start += sequences[i] - overlapFrames;
   }
-  const total = sequences.reduce((a, b) => a + b, 0) - Math.max(0, n - 1) * overlapFrames;
-  return { sequences, overlapFrames, transitionStarts, total: Math.max(1, total) };
+  const total =
+    sequences.reduce((a, b) => a + b, 0) - Math.max(0, n - 1) * overlapFrames;
+  return {
+    sequences,
+    overlapFrames,
+    transitionStarts,
+    total: Math.max(1, total),
+  };
 };
 
-export const slideshowDuration = (p: SlideshowProps) => resolveTimeline(p).total;
+export const slideshowDuration = (p: SlideshowProps) =>
+  resolveTimeline(p).total;
 
-const MIX_ORDER: SlideshowTransition[] = ["fade", "slide", "wipe", "fade", "flip"];
+const MIX_ORDER: SlideshowTransition[] = [
+  "fade",
+  "slide",
+  "wipe",
+  "fade",
+  "flip",
+];
 
 const presentationFor = (
   kind: SlideshowTransition,
@@ -162,7 +186,8 @@ const Slide: React.FC<{
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-  const scale = index % 2 === 0 ? 1 + zoom * progress : 1 + zoom * (1 - progress);
+  const scale =
+    index % 2 === 0 ? 1 + zoom * progress : 1 + zoom * (1 - progress);
 
   return (
     <AbsoluteFill style={{ overflow: "hidden" }}>
@@ -214,54 +239,83 @@ export const SlideshowVideo: React.FC<SlideshowProps> = (props) => {
 
   // Com capa, a primeira transição é um fade; só as demais viram página.
   const isSingle = (i: number) =>
-    (props.coverFirst && i === 0) || (props.singles ?? []).includes(i);
+    (props.coverFirst && i === 0) ||
+    (props.singles ?? []).includes(i) ||
+    i >= props.images.length; // quadro de encerramento
   const kindAt = (i: number): SlideshowTransition =>
     props.transitionType === "pageTurn" && (isSingle(i) || isSingle(i + 1))
       ? "fade"
       : props.transitionType;
 
+  // Cenas e transições na ordem: cada imagem, a transição para a próxima e,
+  // se houver, o quadro de encerramento no fim.
+  const slides: React.ReactElement[] = props.images.flatMap((src, i) => {
+    const items = [
+      <TransitionSeries.Sequence key={`s-${i}`} durationInFrames={sequences[i]}>
+        <Slide
+          src={src}
+          fit={props.slideFit?.[i] ?? props.fit}
+          zoom={props.zoom}
+          durationInFrames={sequences[i]}
+          index={i}
+        />
+      </TransitionSeries.Sequence>,
+    ];
+    if (
+      i < props.images.length - 1 ||
+      (props.endCard && i === props.images.length - 1)
+    ) {
+      items.push(
+        <TransitionSeries.Transition
+          key={`t-${i}`}
+          presentation={presentationFor(kindAt(i), i, { width, height })}
+          timing={linearTiming({ durationInFrames: overlapFrames })}
+        />,
+      );
+    }
+    return items;
+  });
+  if (props.endCard) {
+    slides.push(
+      <TransitionSeries.Sequence
+        key="end"
+        durationInFrames={sequences[props.images.length]}
+      >
+        <EndCard {...props.endCard} />
+      </TransitionSeries.Sequence>,
+    );
+  }
+
   return (
     <AbsoluteFill style={{ backgroundColor: props.background }}>
-      {props.audio ? <Audio src={staticFile(props.audio)} loop volume={musicVolume} /> : null}
+      {props.audio ? (
+        <Audio src={staticFile(props.audio)} loop volume={musicVolume} />
+      ) : null}
       {props.pageSound
         ? transitionStarts.map((from, i) =>
-            props.transitionType === "pageTurn" ? (
-              <Sequence key={`snd-${i}`} from={from + 3} durationInFrames={FPS * 2}>
-                <Audio src={staticFile(props.pageSound!)} volume={() => props.pageSoundVolume} />
+            props.transitionType === "pageTurn" &&
+            i < props.images.length - 1 ? (
+              <Sequence
+                key={`snd-${i}`}
+                from={from + 3}
+                durationInFrames={FPS * 2}
+              >
+                <Audio
+                  src={staticFile(props.pageSound!)}
+                  volume={() => props.pageSoundVolume}
+                />
               </Sequence>
             ) : null,
           )
         : null}
-      <TransitionSeries>
-        {props.images.flatMap((src, i) => {
-          const items = [
-            <TransitionSeries.Sequence key={`s-${i}`} durationInFrames={sequences[i]}>
-              <Slide
-                src={src}
-                fit={props.slideFit?.[i] ?? props.fit}
-                zoom={props.zoom}
-                durationInFrames={sequences[i]}
-                index={i}
-              />
-            </TransitionSeries.Sequence>,
-          ];
-          if (i < props.images.length - 1) {
-            items.push(
-              <TransitionSeries.Transition
-                key={`t-${i}`}
-                presentation={presentationFor(kindAt(i), i, { width, height })}
-                timing={linearTiming({ durationInFrames: overlapFrames })}
-              />,
-            );
-          }
-          return items;
-        })}
-      </TransitionSeries>
+      <TransitionSeries>{slides}</TransitionSeries>
     </AbsoluteFill>
   );
 };
 
-const calculateMetadata: CalculateMetadataFunction<SlideshowProps> = ({ props }) => ({
+const calculateMetadata: CalculateMetadataFunction<SlideshowProps> = ({
+  props,
+}) => ({
   durationInFrames: slideshowDuration(props),
   width: props.width,
   height: props.height,

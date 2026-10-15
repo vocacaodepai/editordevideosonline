@@ -62,6 +62,8 @@ A duração do vídeo é calculada sozinha. A música (Chopin, Noturno Op. 9 nº
 2. Crie `livros/<slug>/livro.json` na ordem de leitura. Cada página tem `arquivo`, `rotulo` e `palavras` (só as da história: sem direitos, ISBN, ficha catalográfica, selo FSC, editora ou crédito de tradução). Use `segundos` para fixar o tempo à mão, `"tipo": "capa"` ou `"contracapa"` para página única e `"fit": "contain"` para imagem que não é 16:9.
 3. `node scripts/renderizar-livro.mjs <slug> --so-lista` mostra os tempos; sem a flag, renderiza em `out/<slug>.mp4`. Exemplo pronto: `livros/macaco-danado/livro.json`.
 
+**Encerramento:** todo livro termina com um quadro de agradecimento sobre a capa desfocada. O texto padrão está em `livros/encerramento-padrao.json` (`titulo`, `subtitulo`, `rodape`, `segundos`). Cada livro pode trocar qualquer campo com a chave `"encerramento"` no seu `livro.json` (inclusive `"fundo"`, outra imagem de fundo), ou desligar com `"encerramento": false`.
+
 **Tempo de leitura** (`scripts/tempo-leitura.mjs`): 3s de base mais 0,35s por palavra (cerca de 170 palavras por minuto).
 
 | Palavras | 0 | 1-8 | 9-16 | 17-25 | 26-35 | 36-50 | 51-70 | 70+ |
