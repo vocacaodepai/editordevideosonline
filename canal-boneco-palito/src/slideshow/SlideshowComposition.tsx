@@ -171,6 +171,8 @@ const Slide: React.FC<{
         <Img
           src={staticFile(src)}
           style={{
+            position: "absolute",
+            inset: 0,
             width: "100%",
             height: "100%",
             objectFit: "cover",
@@ -182,6 +184,8 @@ const Slide: React.FC<{
       <Img
         src={staticFile(src)}
         style={{
+          position: "absolute",
+          inset: 0,
           width: "100%",
           height: "100%",
           objectFit: fit,

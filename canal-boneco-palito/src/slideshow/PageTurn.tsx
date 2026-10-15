@@ -55,6 +55,13 @@ const PageTurnPresentation: React.FC<
   const { width } = useVideoConfig();
   const entering = presentationDirection === "entering";
 
+  // Fora da virada (antes de começar ou depois de terminar), a cena é só a imagem.
+  // Sem isso, as peças com zIndex continuam por cima e escondem a transição
+  // seguinte, por exemplo um fade para a contracapa.
+  if (entering ? presentationProgress >= 1 : presentationProgress <= 0) {
+    return <AbsoluteFill>{children}</AbsoluteFill>;
+  }
+
   // Suaviza o começo e o fim: a folha acelera ao se soltar e freia ao pousar.
   const p = Easing.inOut(Easing.cubic)(presentationProgress);
   const angle = 180 * p;
